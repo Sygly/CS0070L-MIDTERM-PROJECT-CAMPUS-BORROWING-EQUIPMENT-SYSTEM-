@@ -1,0 +1,682 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+
+package com.mycompany.campusequipmentborrowingsystem;
+
+/**
+ *
+ * @author SYVYL GLYNN M. GARAY
+ */
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// ==========================================================
+// INTERFACE
+// ==========================================================
+
+interface Borrowable {
+    boolean borrow();
+    boolean returnEquipment();
+}
+// ==========================================================
+// ABSTRACT CLASS
+// ==========================================================
+
+abstract class Equipment implements Borrowable {
+
+    // Encapsulation: private fields
+    private String equipmentId;
+    private String equipmentName;
+    private String category;
+    private String condition;
+    private String status;
+
+    // Constructor
+    public Equipment(String equipmentId, String equipmentName,
+                     String category, String condition) {
+
+        this.equipmentId = equipmentId;
+        this.equipmentName = equipmentName;
+        this.category = category;
+        this.condition = condition;
+        this.status = "Available";
+    }
+
+    // Getters
+    public String getEquipmentId() {
+        return this.equipmentId;
+    }
+    public String getEquipmentName() {
+        return this.equipmentName;
+    }
+    public String getCategory() {
+        return this.category;
+    }
+    public String getCondition() {
+        return this.condition;
+    }
+    public String getStatus() {
+        return this.status;
+    }
+
+    // Setters
+    public void setEquipmentName(String equipmentName) {
+        this.equipmentName = equipmentName;
+    }
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    // Interface method
+    @Override
+    public boolean borrow() {
+
+        if (this.status.equalsIgnoreCase("Available")) {
+            this.status = "Borrowed";
+            return true;
+        }
+        return false;
+    }
+
+    // Interface method
+    @Override
+    public boolean returnEquipment() {
+
+        if (this.status.equalsIgnoreCase("Borrowed")) {
+            this.status = "Available";
+            return true;
+        }
+        return false;
+    }
+
+    // Abstract method
+    public abstract void displayDetails();
+}
+
+// ==========================================================
+// SUBCLASS 1
+// ==========================================================
+
+class ComputerEquipment extends Equipment {
+
+    private String operatingSystem;
+
+    // Constructor
+    public ComputerEquipment(String equipmentId,
+                             String equipmentName,
+                             String condition,
+                             String operatingSystem) {
+
+        // super calls the constructor of Equipment
+        super(equipmentId, equipmentName, "Computer", condition);
+
+        this.operatingSystem = operatingSystem;
+    }
+
+    public String getOperatingSystem() {
+        return this.operatingSystem;
+    }
+
+    public void setOperatingSystem(String operatingSystem) {
+        this.operatingSystem = operatingSystem;
+    }
+
+    // Method overriding
+    @Override
+    public void displayDetails() {
+
+        System.out.println("----------------------------------------");
+        System.out.println("Equipment ID   : " + getEquipmentId());
+        System.out.println("Equipment Name : " + getEquipmentName());
+        System.out.println("Category       : " + getCategory());
+        System.out.println("Condition      : " + getCondition());
+        System.out.println("Status         : " + getStatus());
+        System.out.println("Operating Sys. : " + operatingSystem);
+        System.out.println("----------------------------------------");
+    }
+}
+
+// ==========================================================
+// SUBCLASS 2
+// ==========================================================
+
+class SportsEquipment extends Equipment {
+
+    private String sportType;
+
+    // Constructor
+    public SportsEquipment(String equipmentId,
+                           String equipmentName,
+                           String condition,
+                           String sportType) {
+
+        super(equipmentId, equipmentName, "Sports", condition);
+
+        this.sportType = sportType;
+    }
+
+    public String getSportType() {
+        return this.sportType;
+    }
+
+    public void setSportType(String sportType) {
+        this.sportType = sportType;
+    }
+
+    // Method overriding
+    @Override
+    public void displayDetails() {
+
+        System.out.println("----------------------------------------");
+        System.out.println("Equipment ID   : " + getEquipmentId());
+        System.out.println("Equipment Name : " + getEquipmentName());
+        System.out.println("Category       : " + getCategory());
+        System.out.println("Condition      : " + getCondition());
+        System.out.println("Status         : " + getStatus());
+        System.out.println("Sport Type     : " + sportType);
+        System.out.println("----------------------------------------");
+    }
+}
+
+// ==========================================================
+// BORROWER CLASS
+// ==========================================================
+
+class Borrower {
+    private String borrowerId;
+    private String borrowerName;
+    private String course;
+    // Constructor
+    public Borrower(String borrowerId, String borrowerName, String course) {
+        this.borrowerId = borrowerId;
+        this.borrowerName = borrowerName;
+        this.course = course;
+    }
+    // Getters
+    public String getBorrowerId() {
+        return this.borrowerId;
+    }
+    public String getBorrowerName() {
+        return this.borrowerName;
+    }
+    public String getCourse() {
+        return this.course;
+    }
+
+    // Setters
+    public void setBorrowerName(String borrowerName) {
+        this.borrowerName = borrowerName;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public void displayBorrower() {
+
+        System.out.println("----------------------------------------");
+        System.out.println("Borrower ID   : " + borrowerId);
+        System.out.println("Borrower Name : " + borrowerName);
+        System.out.println("Course        : " + course);
+        System.out.println("----------------------------------------");
+    }
+}
+
+// ==========================================================
+// BORROWING CLASS
+// ==========================================================
+
+class Borrowing {
+
+    private Borrower borrower;
+    private Equipment equipment;
+    private String borrowDate;
+    private boolean returned;
+
+    // Constructor
+    public Borrowing(Borrower borrower,
+                     Equipment equipment,
+                     String borrowDate) {
+
+        this.borrower = borrower;
+        this.equipment = equipment;
+        this.borrowDate = borrowDate;
+        this.returned = false;
+    }
+
+    public Borrower getBorrower() {
+        return this.borrower;
+    }
+    public Equipment getEquipment() {
+        return this.equipment;
+    }
+    public String getBorrowDate() {
+        return this.borrowDate;
+    }
+    public boolean isReturned() {
+        return this.returned;
+    }
+    public void completeReturn() {
+
+        if (!returned) {
+            equipment.returnEquipment();
+            returned = true;
+        }
+    }
+    public void displayBorrowing() {
+
+        System.out.println("----------------------------------------");
+        System.out.println("Borrower       : " +
+                borrower.getBorrowerName());
+
+        System.out.println("Equipment      : " +
+                equipment.getEquipmentName());
+
+        System.out.println("Equipment ID   : " +
+                equipment.getEquipmentId());
+
+        System.out.println("Borrow Date    : " +
+                borrowDate);
+
+        if (returned) {
+            System.out.println("Borrow Status  : Returned");
+        } else {
+            System.out.println("Borrow Status  : Currently Borrowed");
+        }
+
+        System.out.println("----------------------------------------");
+    }
+}
+
+// ==========================================================
+// MAIN SYSTEM CLASS
+// ==========================================================
+
+public class CampusEquipmentBorrowingSystem {
+
+    // ArrayLists store objects
+    private static ArrayList<Equipment> equipmentList =
+            new ArrayList<>();
+
+    private static ArrayList<Borrower> borrowerList =
+            new ArrayList<>();
+
+    private static ArrayList<Borrowing> borrowingList =
+            new ArrayList<>();
+
+    private static Scanner scanner =
+            new Scanner(System.in);
+
+    // ======================================================
+    // MAIN METHOD
+    // ======================================================
+    public static void main(String[] args) {
+
+        initializeEquipment();
+
+        int choice;
+
+        // LOOP: keeps the menu running
+        do {
+            displayMenu();
+
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            // SWITCH: menu processing
+            switch (choice) {
+
+                case 1:
+                    viewEquipment();
+                    break;
+
+                case 2:
+                    addBorrower();
+                    break;
+
+                case 3:
+                    borrowEquipment();
+                    break;
+
+                case 4:
+                    returnEquipment();
+                    break;
+
+                case 5:
+                    viewBorrowers();
+                    break;
+
+                case 6:
+                    viewBorrowingRecords();
+                    break;
+
+                case 0:
+                    System.out.println(
+                            "\nThank you for using the Campus Equipment Borrowing System!"
+                    );
+                    break;
+
+                default:
+                    System.out.println(
+                            "\nInvalid choice. Please try again."
+                    );
+            }
+
+        } while (choice != 0);
+
+        scanner.close();
+    }
+
+    // ======================================================
+    // INITIALIZE EQUIPMENT
+    // ======================================================
+
+    public static void initializeEquipment() {
+
+        Equipment laptop = new ComputerEquipment(
+                "C001",
+                "Dell Laptop",
+                "Good",
+                "Windows 11"
+        );
+
+        Equipment projector = new ComputerEquipment(
+                "C002",
+                "Epson Projector",
+                "Good",
+                "Android"
+        );
+
+        Equipment basketball = new SportsEquipment(
+                "S001",
+                "Basketball",
+                "Excellent",
+                "Basketball"
+        );
+
+        Equipment racket = new SportsEquipment(
+                "S002",
+                "Tennis Racket",
+                "Good",
+                "Tennis"
+        );
+
+        equipmentList.add(laptop);
+        equipmentList.add(projector);
+        equipmentList.add(basketball);
+        equipmentList.add(racket);
+    }
+
+    // ======================================================
+    // DISPLAY MENU
+    // ======================================================
+
+    public static void displayMenu() {
+
+        System.out.println("\n========================================");
+        System.out.println(" CAMPUS EQUIPMENT BORROWING SYSTEM");
+        System.out.println("========================================");
+        System.out.println("1. View Equipment");
+        System.out.println("2. Register Borrower");
+        System.out.println("3. Borrow Equipment");
+        System.out.println("4. Return Equipment");
+        System.out.println("5. View Borrowers");
+        System.out.println("6. View Borrowing Records");
+        System.out.println("0. Exit");
+        System.out.println("========================================");
+    }
+
+    // ======================================================
+    // VIEW EQUIPMENT
+    // ======================================================
+
+    public static void viewEquipment() {
+
+        System.out.println("\n========== EQUIPMENT LIST ==========");
+
+        if (equipmentList.isEmpty()) {
+
+            System.out.println("No equipment available.");
+
+        } else {
+
+            // POLYMORPHISM
+            // Equipment reference can hold
+            // ComputerEquipment or SportsEquipment objects
+
+            for (Equipment equipment : equipmentList) {
+
+                equipment.displayDetails();
+            }
+        }
+    }
+
+    // ======================================================
+    // ADD BORROWER
+    // ======================================================
+
+    public static void addBorrower() {
+
+        System.out.println("\n========== REGISTER BORROWER ==========");
+
+        System.out.print("Enter Borrower ID: ");
+        String id = scanner.nextLine();
+
+        System.out.print("Enter Borrower Name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter Course: ");
+        String course = scanner.nextLine();
+
+        Borrower borrower =
+                new Borrower(id, name, course);
+
+        borrowerList.add(borrower);
+
+        System.out.println("\nBorrower registered successfully!");
+    }
+
+    // ======================================================
+    // BORROW EQUIPMENT
+    // ======================================================
+
+    public static void borrowEquipment() {
+
+        System.out.println("\n========== BORROW EQUIPMENT ==========");
+
+        if (borrowerList.isEmpty()) {
+
+            System.out.println(
+                    "No borrowers registered. Please register first."
+            );
+            return;
+        }
+
+        System.out.print("Enter Borrower ID: ");
+        String borrowerId = scanner.nextLine();
+
+        Borrower borrower = findBorrower(borrowerId);
+
+        if (borrower == null) {
+
+            System.out.println("Borrower not found.");
+            return;
+        }
+
+        System.out.print("Enter Equipment ID: ");
+        String equipmentId = scanner.nextLine();
+
+        Equipment equipment =
+                findEquipment(equipmentId);
+
+        if (equipment == null) {
+
+            System.out.println("Equipment not found.");
+            return;
+        }
+
+        if (equipment.borrow()) {
+
+            System.out.print("Enter Borrow Date: ");
+            String date = scanner.nextLine();
+
+            Borrowing borrowing =
+                    new Borrowing(
+                            borrower,
+                            equipment,
+                            date
+                    );
+
+            borrowingList.add(borrowing);
+
+            System.out.println(
+                    "\nEquipment borrowed successfully!"
+            );
+
+        } else {
+
+            System.out.println(
+                    "\nSorry, this equipment is already borrowed."
+            );
+        }
+    }
+
+    // ======================================================
+    // RETURN EQUIPMENT
+    // ======================================================
+
+    public static void returnEquipment() {
+
+        System.out.println("\n========== RETURN EQUIPMENT ==========");
+
+        System.out.print("Enter Equipment ID: ");
+        String equipmentId = scanner.nextLine();
+
+        Equipment equipment =
+                findEquipment(equipmentId);
+
+        if (equipment == null) {
+
+            System.out.println("Equipment not found.");
+            return;
+        }
+
+        if (!equipment.getStatus().equalsIgnoreCase("Borrowed")) {
+
+            System.out.println(
+                    "This equipment is not currently borrowed."
+            );
+
+            return;
+        }
+
+        for (Borrowing borrowing : borrowingList) {
+
+            if (borrowing.getEquipment()
+                    .getEquipmentId()
+                    .equalsIgnoreCase(equipmentId)
+                    && !borrowing.isReturned()) {
+
+                borrowing.completeReturn();
+
+                System.out.println(
+                        "\nEquipment returned successfully!"
+                );
+
+                return;
+            }
+        }
+
+        System.out.println("Borrowing record not found.");
+    }
+
+
+    // ======================================================
+    // VIEW BORROWERS
+    // ======================================================
+
+    public static void viewBorrowers() {
+
+        System.out.println("\n========== BORROWER LIST ==========");
+
+        if (borrowerList.isEmpty()) {
+
+            System.out.println("No registered borrowers.");
+
+        } else {
+
+            for (Borrower borrower : borrowerList) {
+
+                borrower.displayBorrower();
+            }
+        }
+    }
+
+
+    // ======================================================
+    // VIEW BORROWING RECORDS
+    // ======================================================
+
+    public static void viewBorrowingRecords() {
+
+        System.out.println("\n========== BORROWING RECORDS ==========");
+
+        if (borrowingList.isEmpty()) {
+
+            System.out.println("No borrowing records.");
+
+        } else {
+
+            for (Borrowing borrowing : borrowingList) {
+
+                borrowing.displayBorrowing();
+            }
+        }
+    }
+
+
+    // ======================================================
+    // FIND BORROWER
+    // ======================================================
+
+    public static Borrower findBorrower(String id) {
+
+        for (Borrower borrower : borrowerList) {
+
+            if (borrower.getBorrowerId()
+                    .equalsIgnoreCase(id)) {
+
+                return borrower;
+            }
+        }
+
+        return null;
+    }
+
+
+    // ======================================================
+    // FIND EQUIPMENT
+    // ======================================================
+
+    public static Equipment findEquipment(String id) {
+
+        for (Equipment equipment : equipmentList) {
+
+            if (equipment.getEquipmentId()
+                    .equalsIgnoreCase(id)) {
+
+                return equipment;
+            }
+        }
+
+        return null;
+    }
+}
